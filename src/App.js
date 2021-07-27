@@ -15,33 +15,41 @@ function App() {
     글제목변경(newArray);
   }
 
+  // function 반복된UI(){
+  //   var 어레이 =[];
+  //   for(var i=0; i<3; i++){
+  //     어레이.push(<div>안녕</div>);
+  //   }
+
+  //   return 어레이
+  // }
+
   return (
     <div className="App">
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
       <button onClick={ 제목정렬 }>제목 정렬하기</button>
-      <div className="list">
-        <h3> {글제목[0]} <span onClick={()=>{ 좋아요변경(좋아요+1) }}>😘</span> {좋아요} </h3>
-        <p>7월 25일 발행</p>
-        <hr/>
-      </div>
-      <div className="list">
-        <h3> {글제목[1]} </h3>
-        <p>7월 25일 발행</p>
-        <hr/>
-      </div>
-      <div className="list">
-        <h3 onClick={()=>{modal변경(true)}}> {글제목[2]} </h3>
-        <p>7월 26일 발행</p>
-        <hr/>
-      </div>
-
+    
       <button onClick={()=>{modal변경(!modal)}}>버튼</button>
       {
         modal===true
         ? <Modal />
         : null
+      }
+      
+      {/* { 반복된UI() } */}
+
+      {
+        글제목.map(function(글){
+          return (
+          <div className="list">
+            <h3> {글} </h3>
+            <p>7월 25일 발행</p>
+            <hr/>
+          </div>
+          )
+        })
       }
     </div>
   );
