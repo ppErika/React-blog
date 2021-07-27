@@ -7,6 +7,8 @@ function App() {
   let [글제목, 글제목변경] = useState(['하이하이요', '우동 맛있겠다', '잠을 달라']);
   let [좋아요, 좋아요변경] = useState(0);
 
+  let[modal, modal변경] = useState(false);
+
   function 제목정렬() {
     var newArray = [...글제목];
     newArray.sort();
@@ -30,13 +32,17 @@ function App() {
         <hr/>
       </div>
       <div className="list">
-        <h3> {글제목[2]} </h3>
+        <h3 onClick={()=>{modal변경(true)}}> {글제목[2]} </h3>
         <p>7월 26일 발행</p>
         <hr/>
       </div>
 
-      <Modal />
-      
+      <button onClick={()=>{modal변경(!modal)}}>버튼</button>
+      {
+        modal===true
+        ? <Modal />
+        : null
+      }
     </div>
   );
 }
@@ -52,4 +58,5 @@ function Modal(){
     </>
   )
 }
+
 export default App;
