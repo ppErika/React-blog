@@ -7,13 +7,19 @@ function App() {
   let [글제목, 글제목변경] = useState(['하이하이요', '우동 맛있겠다', '잠을 달라']);
   let [좋아요, 좋아요변경] = useState(0);
   let [modal, modal변경] = useState(false);
-  let [누른제목, 누른제목변경]=useState(0);
-  let [입력값, 입력값변경]=useState('');
+  let [누른제목, 누른제목변경] = useState(0);
+  let [입력값, 입력값변경] = useState('');
 
   function 제목정렬() {
     var newArray = [...글제목];
     newArray.sort();
     글제목변경(newArray);
+  }
+
+  function 글추가() {
+    var arrayCopy = [...글제목];
+    arrayCopy.unshift(입력값);
+    글제목변경(arrayCopy);
   }
 
   return (
@@ -27,7 +33,7 @@ function App() {
         글제목.map(function (글, i) {
           return (
             <div className="list" key={i}>
-              <h3 onClick={()=>{ 누른제목변경(i) }}> {글} <span>😘</span> {좋아요}</h3>
+              <h3 onClick={() => { 누른제목변경(i) }}> {글} <span>😘</span> {좋아요}</h3>
               <p>7월 25일 발행</p>
               <hr />
             </div>
@@ -35,8 +41,10 @@ function App() {
         })
       }
 
-
-      <input onChange={ (e)=>{ 입력값변경(e.target.value) } } />
+      <div className="publish">
+        <input onChange={ (e) => { 입력값변경(e.target.value) }} />
+        <button onClick={ 글추가 }>저장</button>
+      </div>
 
       <button onClick={() => { modal변경(!modal) }}>열고 닫는 버튼</button>
       {
