@@ -1,5 +1,3 @@
-/*eslint-disable*/
-
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import listJson from './json/listJson.json';
@@ -13,15 +11,18 @@ function App() {
   let [modal, modal변경] = useState(false);
   let [누른제목, 누른제목변경] = useState(0);
   let [입력값, 입력값변경] = useState('');
-  let [listData, changeListData] = useState([]);
-  let [writeData, changeWriteData] = useState([]);
+  let [listData, setListData] = useState([]);
+  let [writeData, setWriteData] = useState([]);
 
   // 페이지가 열릴 때 json파일의 데이터를 받아와서 state에 저장
   useEffect(()=>{
     var newArray = [...listJson];
-    changeListData(newArray);
+    setListData(newArray);
     var newArray2 = [writeJson];
-    changeWriteData(newArray2);
+    setWriteData(newArray2);
+
+    // 백엔드 연동이 된다면 list를 요청하고
+    // return을 받아서 list state에 넣는 방식으로 수정
   },[]);
 
   function 제목정렬() {
@@ -44,13 +45,24 @@ function App() {
     var listDataCopy = [...listData];
     var writedataCopy = [...writeData];
     listDataCopy.unshift(writedataCopy[0]);
-    changeListData(listDataCopy);
+    setListData(listDataCopy);
   }
 
   function 좋아요추가(i) {
     var arrayCopy = [...좋아요];
     arrayCopy[i]+=1;
     좋아요변경(arrayCopy);
+
+    // 글 id에 맞춰서 좋아요 추가 요청을 백엔드에 보내고
+    // 성공하면 list스테이트에서 해당id의 좋아요 +=1
+    // onClick 매서드의 좋아요추가(i)를 좋아요추가(data.id)로 사용하면 될 듯
+  }
+
+  function 글삭제(id){
+    console.log(id);
+
+    // 받아온 id로 백엔드에 delete요청
+    // 문제없이 delete되면 list state에서 해당 id 글을 찾아서 삭제
   }
 
   return (
@@ -65,7 +77,9 @@ function App() {
           return (
             <div className="list" key={i}>
               <h3 onClick={() => { 누른제목변경(i) }}> {data.context} <span onClick={ ()=>{ 좋아요추가(i) } }>😘</span> { data.likes }</h3>
-              <p>{data.issued}</p>
+              <p>{data.issued}
+                <button onClick={() => { 글삭제(data.id) }} style={{ marginLeft: '5px' }}> 글 삭제 </button> 
+              </p>
               <hr />
             </div>
           )
