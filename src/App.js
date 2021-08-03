@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import listJson from './json/listJson.json';
+import writeJson from './json/writeJson.json';
+
 
 function App() {
 
@@ -9,6 +11,18 @@ function App() {
   let [modal, modal변경] = useState(false);
   let [누른제목, 누른제목변경] = useState(0);
   let [입력값, 입력값변경] = useState('');
+  let [listData, changeListData] = useState([]);
+  let [writeData, changeWriteData] = useState([]);
+
+  useEffect(()=>{
+    var newArray = [...listJson];
+    changeListData(newArray);
+    var newArray2 = [writeJson];
+    changeWriteData(newArray2);
+    //console.log(listData);
+    //console.log(writeData);
+  },[]);
+  
 
   function 제목정렬() {
     var newArray = [...글제목];
