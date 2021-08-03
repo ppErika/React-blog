@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import listJson from './json/listJson.json';
@@ -14,15 +16,13 @@ function App() {
   let [listData, changeListData] = useState([]);
   let [writeData, changeWriteData] = useState([]);
 
+  // 페이지가 열릴 때 json파일의 데이터를 받아와서 state에 저장
   useEffect(()=>{
     var newArray = [...listJson];
     changeListData(newArray);
     var newArray2 = [writeJson];
     changeWriteData(newArray2);
-    //console.log(listData);
-    //console.log(writeData);
   },[]);
-  
 
   function 제목정렬() {
     var newArray = [...글제목];
@@ -31,12 +31,20 @@ function App() {
   }
 
   function 글추가() {
-    var arrayCopy = [...글제목];
-    arrayCopy.unshift(입력값);
-    글제목변경(arrayCopy);
-    var arrayCopy2 = [...좋아요];
-    arrayCopy2.unshift(0);
-    좋아요변경(arrayCopy2);
+    // var arrayCopy = [...글제목];
+    // arrayCopy.unshift(입력값);
+    // 글제목변경(arrayCopy);
+    // var arrayCopy2 = [...좋아요];
+    // arrayCopy2.unshift(0);
+    // 좋아요변경(arrayCopy2);
+
+    // 글 추가를 위한 post데이터를 백엔드에 보내고
+    // return온 데이터를 listdata에 추가
+    // 해당 테스트에선 return온 데이터를 writeData로 대체
+    var listDataCopy = [...listData];
+    var writedataCopy = [...writeData];
+    listDataCopy.unshift(writedataCopy[0]);
+    changeListData(listDataCopy);
   }
 
   function 좋아요추가(i) {
@@ -53,11 +61,11 @@ function App() {
       <button onClick={ 제목정렬 }>제목 정렬하기</button>
 
       {
-        글제목.map(function (글, i) {
+        listData.map(function (data, i) {
           return (
             <div className="list" key={i}>
-              <h3 onClick={() => { 누른제목변경(i) }}> {글} <span onClick={ ()=>{ 좋아요추가(i) } }>😘</span> { 좋아요[i] }</h3>
-              <p>7월 25일 발행</p>
+              <h3 onClick={() => { 누른제목변경(i) }}> {data.context} <span onClick={ ()=>{ 좋아요추가(i) } }>😘</span> { data.likes }</h3>
+              <p>{data.issued}</p>
               <hr />
             </div>
           )
