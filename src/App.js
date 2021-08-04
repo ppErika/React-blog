@@ -7,7 +7,7 @@ import writeJson from './json/writeJson.json';
 function App() {
 
   // let [글제목, 글제목변경] = useState(['하이하이요', '우동 맛있겠다', '잠을 달라']);
-  let [좋아요, 좋아요변경] = useState([0, 0, 0]);
+  // let [좋아요, 좋아요변경] = useState([0, 0, 0]);
   let [modal, modal변경] = useState(false);
   let [누른제목아이디, 누른제목아이디변경] = useState(0);
   let [입력값, 입력값변경] = useState('');
