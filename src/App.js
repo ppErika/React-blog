@@ -49,9 +49,9 @@ function App() {
   }
 
   function 좋아요추가(i) {
-    var arrayCopy = [...좋아요];
-    arrayCopy[i]+=1;
-    좋아요변경(arrayCopy);
+    var arrayCopy = [...listData];
+    arrayCopy[i].likes+=1;
+    setListData(arrayCopy);
 
     // 글 id에 맞춰서 좋아요 추가 요청을 백엔드에 보내고
     // 성공하면 list스테이트에서 해당id의 좋아요 +=1
