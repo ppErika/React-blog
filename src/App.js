@@ -6,10 +6,10 @@ import writeJson from './json/writeJson.json';
 
 function App() {
 
-  let [글제목, 글제목변경] = useState(['하이하이요', '우동 맛있겠다', '잠을 달라']);
+  // let [글제목, 글제목변경] = useState(['하이하이요', '우동 맛있겠다', '잠을 달라']);
   let [좋아요, 좋아요변경] = useState([0, 0, 0]);
   let [modal, modal변경] = useState(false);
-  let [누른제목, 누른제목변경] = useState(0);
+  let [누른제목아이디, 누른제목아이디변경] = useState(0);
   let [입력값, 입력값변경] = useState('');
   let [listData, setListData] = useState([]);
   let [writeData, setWriteData] = useState([]);
@@ -26,9 +26,9 @@ function App() {
   },[]);
 
   function 제목정렬() {
-    var newArray = [...글제목];
+    var newArray = [...listData];
     newArray.sort();
-    글제목변경(newArray);
+    setListData(newArray);
   }
 
   function 글추가() {
@@ -76,7 +76,7 @@ function App() {
         listData.map(function (data, i) {
           return (
             <div className="list" key={i}>
-              <h3 onClick={() => { 누른제목변경(i) }}> {data.context} <span onClick={ ()=>{ 좋아요추가(i) } }>😘</span> { data.likes }</h3>
+              <h3 onClick={ ()=>{누른제목아이디변경(data.id)}}> {data.context} <span onClick={ ()=>{ 좋아요추가(i) } }>😘</span> { data.likes }</h3>
               <p>{data.issued}
                 <button onClick={() => { 글삭제(data.id) }} style={{ marginLeft: '5px' }}> 글 삭제 </button> 
               </p>
@@ -85,6 +85,7 @@ function App() {
           )
         })
       }
+      
 
       <div className="publish">
         <input onChange={ (e) => { 입력값변경(e.target.value) }} />
@@ -94,7 +95,7 @@ function App() {
       <button onClick={() => { modal변경(!modal) }}>열고 닫는 버튼</button>
       {
         modal === true
-          ? <Modal 글제목={글제목} 누른제목={누른제목}></Modal>
+          ? <Modal listData={listData} 누른제목아이디={누른제목아이디}></Modal>
           : null
       }
 
@@ -102,16 +103,22 @@ function App() {
   );
 }
 
+
 function Modal(props) {
   return (
-    <>
-      <div className="modal">
-        <h2>{props.글제목[props.누른제목]}</h2>
-        <p>날짜</p>
-        <p>상세 내용</p>
-      </div>
-    </>
-  )
+    <div className="modal">
+      {props.listData.map((data, i) => {
+        if (props.listData[i].id === props.누른제목아이디) {
+          return (
+            <>
+              <h2>{props.listData[i].context}</h2>
+              <p>{props.listData[i].issued}</p>
+            </>
+          );
+        }
+      })}
+    </div>
+  );
 }
 
 export default App;
