@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import listJson from './json/listJson.json';
-import writeJson from './json/writeJson.json';
 import axios from 'axios';
-
 const backendUrl = 'http://localhost:8080';
+
 
 function App() {
 
@@ -14,24 +12,14 @@ function App() {
   let [누른제목, 누른제목변경] = useState(0);
   let [입력값, 입력값변경] = useState('');
   let [listData, setListData] = useState([]);
-  let [writeData, setWriteData] = useState([]);
 
-  // 페이지가 열릴 때 json파일의 데이터를 받아와서 state에 저장
+  // 페이지가 열릴 때 백엔드에 list를 요청하고 받아서 listdata state에 저장
   useEffect(()=>{
-
-    // json파일에서 데이터 가져오는 코드
-    // var newArray = [...listJson];
-    // setListData(newArray);
-    // var newArray2 = [writeJson];
-    // setWriteData(newArray2);
-
-    // 백엔드 연동이 된다면 list를 요청하고
-    // return을 받아서 list state에 넣는 방식으로 수정
     axios.get(backendUrl + '/list')
     .then((result)=>{
-      console.log(result.data)
       var newArray = [...result.data];
-      setListData(newArray);
+      // 시간 순서대로 정렬되도록 reverse 함수로 배열의 순서를 거꾸로 바꿔줌
+      setListData(newArray.reverse());
     })
     .catch(()=>{
       console.log('failed-list')
@@ -44,22 +32,8 @@ function App() {
     글제목변경(newArray);
   }
 
+  // 글 추가를 위한 post데이터를 백엔드에 보내고 return온 데이터를 listdata 맨 위에 추가
   function 글추가() {
-    // var arrayCopy = [...글제목];
-    // arrayCopy.unshift(입력값);
-    // 글제목변경(arrayCopy);
-    // var arrayCopy2 = [...좋아요];
-    // arrayCopy2.unshift(0);
-    // 좋아요변경(arrayCopy2);
-
-    // 해당 테스트에선 return온 데이터를 writeData로 대체
-    // var listDataCopy = [...listData];
-    // var writedataCopy = [...writeData];
-    // listDataCopy.unshift(writedataCopy[0]);
-    // setListData(listDataCopy);
-
-    // 글 추가를 위한 post데이터를 백엔드에 보내고
-    // return온 데이터를 listdata 맨 위에 추가
     let form = new FormData();
     form.append('context', 입력값);
     axios.post(backendUrl + '/write', form)
@@ -73,17 +47,10 @@ function App() {
     })
   }
 
+  // 백엔드에 like요청 및 listData state에서 해당하는 likes +=1
   function 좋아요추가(id) {
-    // var arrayCopy = [...좋아요];
-    // arrayCopy[i]+=1;
-    // 좋아요변경(arrayCopy);
-
-    // 글 id에 맞춰서 좋아요 추가 요청을 백엔드에 보내고
-    // 성공하면 list스테이트에서 해당id의 좋아요 +=1
-    // onClick 매서드의 좋아요추가(i)를 좋아요추가(data.id)로 사용하면 될 듯
     axios.get(backendUrl + '/like/' + id)
     .then((result)=>{
-      console.log(result.data)
       var seq = getIndex(listData, 'id', id)
       var listDataCopy = [...listData];
       listDataCopy[seq].likes += 1;
@@ -94,12 +61,10 @@ function App() {
     })
   }
 
+  // 백엔드에 delete요청 및 listData state에서 해당하는 글 제거
   function 글삭제(id){
-    //console.log(id);
-
     axios.get(backendUrl + '/delete/' + id)
     .then((result)=>{
-      //console.log(result.data)
       var seq = getIndex(listData, 'id', id)
       var listDataCopy = [...listData];
       listDataCopy.splice(seq, 1);
@@ -108,19 +73,18 @@ function App() {
     .catch(()=>{
       console.log('failed-delete')
     })
-
-    // 받아온 id로 백엔드에 delete요청
-    // 문제없이 delete되면 list state에서 해당 id 글을 찾아서 삭제
   }
 
+  // 배열에서 value값으로 해당 오브젝트의 값이 저장된 배열 번호 return
   function getIndex(arr, prop, value) {
     for(var i = 0; i < arr.length; i++) {
       if(arr[i][prop] === value) {
         return i;
       }
     }
-    return -1; //to handle the case where the value doesn't exist
+    return -1;
   }
+
   return (
     <div className="App">
       <div className="black-nav">
